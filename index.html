@@ -188,51 +188,6 @@
             border-bottom: 1px dashed #E0E0E0;
         }
         
-        .nutrition-info {
-            background: #F1F8E9;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin-top: 1.5rem;
-            border-left: 4px solid #4CAF50;
-        }
-        
-        .nutrition-values {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        
-        .nutrition-value {
-            text-align: center;
-            padding: 1rem;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-        
-        .nutrition-value h4 {
-            color: #2E7D32;
-            margin-bottom: 0.5rem;
-        }
-        
-        .nutrition-value .value {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #1B5E20;
-        }
-        
-        .nutrition-value .unit {
-            font-size: 0.9rem;
-            color: #666;
-        }
-        
-        .nutrition-norms {
-            margin-top: 1.5rem;
-            font-size: 0.9rem;
-            color: #666;
-        }
-        
         .suggestions-list {
             margin-top: 1.5rem;
         }
@@ -243,6 +198,7 @@
             border-radius: 8px;
             margin-bottom: 1rem;
             border-left: 4px solid #4CAF50;
+            position: relative;
         }
         
         .suggestion-header {
@@ -255,6 +211,29 @@
         .suggestion-category {
             color: #2E7D32;
             font-size: 0.9rem;
+        }
+        
+        .suggestion-date {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+        
+        .suggestion-rating {
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .star {
+            color: #FFC107;
+            font-size: 1.2rem;
+        }
+        
+        .empty-star {
+            color: #E0E0E0;
+            font-size: 1.2rem;
         }
         
         .add-suggestion {
@@ -287,12 +266,36 @@
             resize: vertical;
         }
         
+        .rating-input {
+            display: flex;
+            gap: 5px;
+            margin-top: 0.5rem;
+        }
+        
+        .rating-input span {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #E0E0E0;
+            transition: color 0.2s;
+        }
+        
+        .rating-input span:hover,
+        .rating-input span.active {
+            color: #FFC107;
+        }
+        
         footer {
             background-color: #1B5E20;
             color: white;
             text-align: center;
             padding: 1.5rem;
             margin-top: 2rem;
+        }
+        
+        .no-suggestions {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
         }
         
         @media (max-width: 768px) {
@@ -303,10 +306,6 @@
             
             .controls {
                 flex-direction: column;
-            }
-            
-            .nutrition-values {
-                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
@@ -420,33 +419,11 @@
             <p>Мы ценим мнение наших учеников, родителей и учителей. Ваши предложения помогают нам становиться лучше!</p>
             
             <div class="suggestions-list" id="suggestions-list">
-                <div class="suggestion">
-                    <div class="suggestion-header">
-                        <span>Мария Иванова (родитель)</span>
-                        <span class="suggestion-category">Предложение</span>
-                    </div>
-                    <p>Хотелось бы видеть в меню больше свежих овощей в виде салатов. Дети часто отказываются от тушеных овощей, но с удовольствием едят свежие.</p>
-                </div>
-                
-                <div class="suggestion">
-                    <div class="suggestion-header">
-                        <span>Рузаль Хабибуллин (ученик 10А)</span>
-                        <span class="suggestion-category">Отзыв</span>
-                    </div>
-                    <p>Мне нравятся котлеты в столовой, но хотелось бы, чтобы порции были немного больше, особенно для старшеклассников.</p>
-                </div>
-                
-                <div class="suggestion">
-                    <div class="suggestion-header">
-                        <span>Анастасия Петрова (учитель)</span>
-                        <span class="suggestion-category">Предложение</span>
-                    </div>
-                    <p>Предлагаю ввести дни национальной кухни, чтобы знакомить детей с кулинарными традициями разных народов.</p>
-                </div>
+                <!-- Отзывы будут загружаться здесь -->
             </div>
             
             <div class="add-suggestion">
-                <h3>Добавить ваше предложение</h3>
+                <h3>Добавить ваш отзыв</h3>
                 <form id="suggestion-form">
                     <div class="form-group">
                         <label for="name">Ваше имя:</label>
@@ -474,11 +451,23 @@
                     </div>
                     
                     <div class="form-group">
+                        <label>Оценка:</label>
+                        <div class="rating-input" id="rating-input">
+                            <span data-value="1">★</span>
+                            <span data-value="2">★</span>
+                            <span data-value="3">★</span>
+                            <span data-value="4">★</span>
+                            <span data-value="5">★</span>
+                        </div>
+                        <input type="hidden" id="rating" value="0" required>
+                    </div>
+                    
+                    <div class="form-group">
                         <label for="message">Ваше сообщение:</label>
                         <textarea id="message" required></textarea>
                     </div>
                     
-                    <button type="submit">Отправить</button>
+                    <button type="submit">Отправить отзыв</button>
                 </form>
             </div>
         </section>
@@ -509,6 +498,11 @@
                 // Показываем выбранную страницу
                 const pageId = this.getAttribute('data-page');
                 document.getElementById(pageId).classList.add('active');
+                
+                // Если открыта страница с отзывами, загружаем их
+                if (pageId === 'suggestions') {
+                    loadSuggestions();
+                }
             });
         });
         
@@ -581,95 +575,6 @@
                 }
             }
         };
-
-        // Данные о КБЖУ для каждого блюда (в расчете на 1 порцию)
-        const nutritionData = {
-            // Завтраки
-            "Каша овсяная с ягодами": { calories: 180, protein: 6, fat: 4, carbs: 30 },
-            "Бутерброд с сыром": { calories: 150, protein: 8, fat: 7, carbs: 15 },
-            "Какао": { calories: 120, protein: 5, fat: 4, carbs: 18 },
-            "Омлет": { calories: 200, protein: 12, fat: 15, carbs: 2 },
-            "Бутерброд с маслом": { calories: 130, protein: 4, fat: 8, carbs: 12 },
-            "Чай с лимоном": { calories: 5, protein: 0, fat: 0, carbs: 1 },
-            "Творожная запеканка": { calories: 220, protein: 15, fat: 8, carbs: 20 },
-            "Бутерброд с ветчиной": { calories: 160, protein: 10, fat: 8, carbs: 12 },
-            "Манная каша": { calories: 150, protein: 5, fat: 4, carbs: 25 },
-            "Блинчики с творогом": { calories: 250, protein: 12, fat: 10, carbs: 28 },
-            "Вареники ленивые со сметаной": { calories: 280, protein: 14, fat: 12, carbs: 30 },
-            "Чай": { calories: 5, protein: 0, fat: 0, carbs: 1 },
-            
-            // Супы
-            "Суп овощной": { calories: 120, protein: 4, fat: 5, carbs: 15 },
-            "Борщ": { calories: 150, protein: 6, fat: 7, carbs: 16 },
-            "Суп-лапша куриный": { calories: 140, protein: 8, fat: 6, carbs: 14 },
-            "Щи": { calories: 130, protein: 5, fat: 6, carbs: 14 },
-            "Уха": { calories: 110, protein: 10, fat: 4, carbs: 8 },
-            "Суп-пюре из брокколи": { calories: 120, protein: 5, fat: 6, carbs: 12 },
-            "Суп гороховый": { calories: 160, protein: 8, fat: 6, carbs: 20 },
-            "Суп грибной": { calories: 130, protein: 5, fat: 7, carbs: 12 },
-            "Рассольник": { calories: 140, protein: 6, fat: 7, carbs: 14 },
-            "Суп-пюре из тыквы": { calories: 120, protein: 4, fat: 6, carbs: 14 },
-            "Суп харчо": { calories: 160, protein: 8, fat: 8, carbs: 14 },
-            "Солянка": { calories: 180, protein: 10, fat: 10, carbs: 12 },
-            "Уха по-фински": { calories: 140, protein: 12, fat: 7, carbs: 6 },
-            "Борщ с мясом": { calories: 180, protein: 10, fat: 9, carbs: 16 },
-            "Борщ с пампушками": { calories: 220, protein: 8, fat: 10, carbs: 24 },
-            
-            // Основные блюда
-            "Котлета куриная с гречкой": { calories: 280, protein: 18, fat: 12, carbs: 25 },
-            "Тефтели с картофельным пюре": { calories: 320, protein: 16, fat: 14, carbs: 30 },
-            "Рыба запеченная с рисом": { calories: 260, protein: 20, fat: 10, carbs: 22 },
-            "Гуляш с макаронами": { calories: 340, protein: 18, fat: 15, carbs: 32 },
-            "Курица тушеная с овощами": { calories: 280, protein: 22, fat: 12, carbs: 18 },
-            "Котлета рыбная с картофельным пюре": { calories: 300, protein: 20, fat: 12, carbs: 28 },
-            "Котлета говяжья с рисом": { calories: 320, protein: 20, fat: 15, carbs: 25 },
-            "Рыба запеченная с картофелем": { calories: 280, protein: 22, fat: 10, carbs: 24 },
-            "Гуляш с гречкой": { calories: 330, protein: 18, fat: 14, carbs: 30 },
-            "Курица запеченная с овощами": { calories: 290, protein: 24, fat: 12, carbs: 16 },
-            "Плов с курицей": { calories: 350, protein: 20, fat: 14, carbs: 35 },
-            "Котлета по-киевски с рисом": { calories: 380, protein: 22, fat: 20, carbs: 25 },
-            "Тефтели в томатном соусе с картофельным пюре": { calories: 340, protein: 18, fat: 16, carbs: 30 },
-            "Рыба под маринадом с картофелем": { calories: 290, protein: 22, fat: 11, carbs: 24 },
-            "Плов": { calories: 360, protein: 16, fat: 15, carbs: 40 },
-            "Курица в сливочном соусе с овощами": { calories: 320, protein: 25, fat: 18, carbs: 14 },
-            "Бефстроганов с картофелем": { calories: 380, protein: 24, fat: 20, carbs: 22 },
-            
-            // Салаты
-            "Салат из свежих овощей": { calories: 80, protein: 2, fat: 5, carbs: 8 },
-            "Салат из капусты": { calories: 70, protein: 2, fat: 4, carbs: 7 },
-            "Салат морковный": { calories: 90, protein: 2, fat: 5, carbs: 10 },
-            "Салат из свеклы": { calories: 85, protein: 2, fat: 4, carbs: 12 },
-            "Салат витаминный": { calories: 95, protein: 3, fat: 6, carbs: 9 },
-            "Салат из огурцов и помидоров": { calories: 75, protein: 2, fat: 4, carbs: 8 },
-            "Салат из капусты и моркови": { calories: 80, protein: 2, fat: 4, carbs: 10 },
-            "Салат овощной": { calories: 85, protein: 3, fat: 5, carbs: 8 },
-            "Салат из свеклы с чесноком": { calories: 95, protein: 3, fat: 5, carbs: 12 },
-            "Салат греческий": { calories: 120, protein: 5, fat: 9, carbs: 6 },
-            "Салат цезарь": { calories: 180, protein: 8, fat: 12, carbs: 10 },
-            "Салат из свеклы с черносливом": { calories: 110, protein: 3, fat: 5, carbs: 15 },
-            "Салат из капусты с яблоком": { calories: 85, protein: 2, fat: 4, carbs: 12 },
-            
-            // Напитки
-            "Компот из сухофруктов": { calories: 70, protein: 0, fat: 0, carbs: 18 },
-            "Кисель ягодный": { calories: 90, protein: 1, fat: 0, carbs: 22 },
-            "Сок": { calories: 100, protein: 1, fat: 0, carbs: 24 },
-            "Компот": { calories: 75, protein: 0, fat: 0, carbs: 19 },
-            "Кисель": { calories: 95, protein: 1, fat: 0, carbs: 23 }
-        };
-
-        // Нормы КБЖУ для разных возрастных групп (на один прием пищи)
-        const nutritionNorms = {
-            elementary: {
-                breakfast: { calories: 450, protein: 15, fat: 15, carbs: 65 },
-                lunch: { calories: 600, protein: 25, fat: 20, carbs: 80 }
-            },
-            middle: {
-                lunch: { calories: 700, protein: 30, fat: 25, carbs: 85 }
-            },
-            high: {
-                lunch: { calories: 800, protein: 35, fat: 30, carbs: 90 }
-            }
-        };
         
         // Генерация меню
         document.getElementById('generate-btn').addEventListener('click', function() {
@@ -689,25 +594,12 @@
             
             let menuHTML = `<h3>Меню на ${dayNames[day]} (${document.getElementById('age-group').options[document.getElementById('age-group').selectedIndex].text})</h3>`;
             
-            // Расчет общего КБЖУ
-            let totalCalories = 0;
-            let totalProtein = 0;
-            let totalFat = 0;
-            let totalCarbs = 0;
-            
             // Для младших классов показываем завтрак и обед
             if (ageGroup === 'elementary') {
                 menuHTML += `<div class="menu-category">
                     <h3>Завтрак</h3>`;
                 menu.breakfast.forEach(item => {
                     menuHTML += `<div class="menu-item">${item}</div>`;
-                    // Добавляем к общему КБЖУ
-                    if (nutritionData[item]) {
-                        totalCalories += nutritionData[item].calories;
-                        totalProtein += nutritionData[item].protein;
-                        totalFat += nutritionData[item].fat;
-                        totalCarbs += nutritionData[item].carbs;
-                    }
                 });
                 menuHTML += `</div>`;
             }
@@ -717,43 +609,148 @@
                 <h3>Обед</h3>`;
             menu.lunch.forEach(item => {
                 menuHTML += `<div class="menu-item">${item}</div>`;
-                // Добавляем к общему КБЖУ
-                if (nutritionData[item]) {
-                    totalCalories += nutritionData[item].calories;
-                    totalProtein += nutritionData[item].protein;
-                    totalFat += nutritionData[item].fat;
-                    totalCarbs += nutritionData[item].carbs;
-                }
             });
             menuHTML += `</div>`;
             
-            // Добавляем информацию о КБЖУ
-            menuHTML += `
-                <div class="nutrition-info">
-                    <h3>Пищевая ценность меню</h3>
-                    <div class="nutrition-values">
-                        <div class="nutrition-value">
-                            <h4>Калории</h4>
-                            <div class="value">${totalCalories}</div>
-                            <div class="unit">ккал</div>
+            menuContainer.innerHTML = menuHTML;
+        });
+        
+        // Система рейтинга
+        const ratingInput = document.getElementById('rating-input');
+        const ratingValue = document.getElementById('rating');
+        const stars = ratingInput.querySelectorAll('span');
+        
+        stars.forEach(star => {
+            star.addEventListener('click', function() {
+                const value = parseInt(this.getAttribute('data-value'));
+                ratingValue.value = value;
+                
+                // Обновляем отображение звезд
+                stars.forEach((s, index) => {
+                    if (index < value) {
+                        s.classList.add('active');
+                    } else {
+                        s.classList.remove('active');
+                    }
+                });
+            });
+        });
+        
+        // Загрузка отзывов из localStorage
+        function loadSuggestions() {
+            const suggestionsList = document.getElementById('suggestions-list');
+            const savedSuggestions = JSON.parse(localStorage.getItem('suggestions')) || [];
+            
+            if (savedSuggestions.length === 0) {
+                suggestionsList.innerHTML = '<div class="no-suggestions"><p>Пока нет отзывов. Будьте первым, кто оставит отзыв!</p></div>';
+                return;
+            }
+            
+            // Сортируем отзывы по дате (новые сначала)
+            savedSuggestions.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            let suggestionsHTML = '';
+            savedSuggestions.forEach(suggestion => {
+                const roleNames = {
+                    student: "ученик",
+                    parent: "родитель",
+                    teacher: "учитель"
+                };
+                
+                const typeNames = {
+                    suggestion: "Предложение",
+                    review: "Отзыв",
+                    complaint: "Жалоба"
+                };
+                
+                // Форматируем дату
+                const date = new Date(suggestion.date);
+                const formattedDate = date.toLocaleDateString('ru-RU', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                });
+                
+                // Создаем звезды рейтинга
+                let starsHTML = '';
+                for (let i = 1; i <= 5; i++) {
+                    if (i <= suggestion.rating) {
+                        starsHTML += '<span class="star">★</span>';
+                    } else {
+                        starsHTML += '<span class="empty-star">★</span>';
+                    }
+                }
+                
+                suggestionsHTML += `
+                    <div class="suggestion">
+                        <div class="suggestion-header">
+                            <span>${suggestion.name} (${roleNames[suggestion.role]})</span>
+                            <span class="suggestion-category">${typeNames[suggestion.type]}</span>
                         </div>
-                        <div class="nutrition-value">
-                            <h4>Белки</h4>
-                            <div class="value">${totalProtein}</div>
-                            <div class="unit">г</div>
+                        <div class="suggestion-rating">
+                            ${starsHTML}
                         </div>
-                        <div class="nutrition-value">
-                            <h4>Жиры</h4>
-                            <div class="value">${totalFat}</div>
-                            <div class="unit">г</div>
-                        </div>
-                        <div class="nutrition-value">
-                            <h4>Углеводы</h4>
-                            <div class="value">${totalCarbs}</div>
-                            <div class="unit">г</div>
-                        </div>
+                        <p>${suggestion.message}</p>
+                        <div class="suggestion-date">${formattedDate}</div>
                     </div>
-                    <div class="nutrition-norms">
-                        <p><strong>Рекомендуемые нормы для ${document.getElementById('age-group').options[document.getElementById('age-group').selectedIndex].text.toLowerCase()}:</strong></p>
-                        <p>${getNutritionNorms
-
+                `;
+            });
+            
+            suggestionsList.innerHTML = suggestionsHTML;
+        }
+        
+        // Обработка формы отзывов
+        document.getElementById('suggestion-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const role = document.getElementById('role').value;
+            const type = document.getElementById('suggestion-type').value;
+            const rating = parseInt(document.getElementById('rating').value);
+            const message = document.getElementById('message').value;
+            
+            // Проверяем, что рейтинг установлен
+            if (rating === 0) {
+                alert('Пожалуйста, поставьте оценку');
+                return;
+            }
+            
+            // Создаем объект отзыва
+            const suggestion = {
+                name,
+                role,
+                type,
+                rating,
+                message,
+                date: new Date().toISOString()
+            };
+            
+            // Получаем существующие отзывы из localStorage
+            const savedSuggestions = JSON.parse(localStorage.getItem('suggestions')) || [];
+            
+            // Добавляем новый отзыв
+            savedSuggestions.push(suggestion);
+            
+            // Сохраняем обратно в localStorage
+            localStorage.setItem('suggestions', JSON.stringify(savedSuggestions));
+            
+            // Обновляем список отзывов
+            loadSuggestions();
+            
+            // Очистка формы
+            document.getElementById('suggestion-form').reset();
+            
+            // Сбрасываем рейтинг
+            ratingValue.value = 0;
+            stars.forEach(star => star.classList.remove('active'));
+            
+            alert('Спасибо за ваш отзыв! Он был успешно добавлен.');
+        });
+        
+        // Загружаем отзывы при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSuggestions();
+        });
+    </script>
+</body>
+</html>
